@@ -1,12 +1,11 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.3
+import QtQuick 2.2
+import QtQuick.Controls 1.2
+import QtQuick.Layouts 1.0
 import QtQuick.Particles 2.0
 
 Page1Form {
     id: page1Form
     property alias labelTimerText : labelTimer.text
-    // property alias dialVisible: dial.visible
     property alias labelColor: labelTimer.color
     property alias rectColor: rect.color
 
@@ -78,15 +77,6 @@ Page1Form {
         id : rect
         anchors.fill: parent
         color: "black"
-    }
-
-    Dial {
-        anchors.fill: parent
-        anchors.margins: 5
-        id: dial
-        stepSize: 1
-        to: 100
-        visible: false
     }
 
     Label {

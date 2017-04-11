@@ -1,18 +1,15 @@
-import QtQuick 2.4
-import QtQuick.Controls 1.4
-import QtQuick.Controls 2.0
-import QtQml.StateMachine 1.0 as DSM
-import QtQuick.Layouts 1.3
+import QtQuick 2.2
+import QtQuick.Controls 1.2
+import QtQuick.Layouts 1.0
 import Qt.labs.settings 1.0
 
 Page2Form {
-
     property alias btnText : button.text
     signal startTimer( double duration_ms )
     signal pauseTimer
-    signal timerTriggered
 
     ColumnLayout {
+
         id: column
         anchors.fill: parent
 
@@ -38,7 +35,7 @@ Page2Form {
             SpinBox {
                 Layout.fillWidth: true
                 id: spinMinute
-                to: 60
+                maximumValue: 60
                 value : settings.min
             }
 
@@ -49,7 +46,7 @@ Page2Form {
             SpinBox {
                 Layout.fillWidth: true
                 id: spinSecond
-                to: 60
+                maximumValue: 60
                 value : settings.sec
             }
 
@@ -57,51 +54,25 @@ Page2Form {
 
         Button {
             id: button
-            text: "Initializeing"
+            text: "Start"
             Layout.fillWidth: true
+            onClicked: {
+                if ( button.text == "Start" ) {
+                    setButtonText( "Stop" )
+                    startTimer( ( spinHour.value * 60 * 60 + spinMinute.value * 60 + spinSecond.value ) * 1000 )
+                }
+                else {
+                    setButtonText( "Start" )
+                    pauseTimer()
+                }
+            }
         }
+
 
     } // column
 
     function setButtonText( sVal ) {
         btnText = sVal
-    }
-
-    DSM.StateMachine {
-        id: stateMachine
-        initialState: stoped
-        running: true
-        DSM.State {
-            id: stoped
-            DSM.SignalTransition {
-                targetState: running
-                signal: button.clicked
-            }
-            onEntered: {
-                setButtonText( "Start" )
-                pauseTimer()
-            }
-        }
-        DSM.State {
-            id: running
-            DSM.SignalTransition {
-                targetState: stoped
-                signal: button.clicked
-            }
-            DSM.SignalTransition {
-                targetState: stoped
-                signal: onTimerTriggered
-            }
-            onEntered: {
-                setButtonText( "Stop" )
-                startTimer( ( spinHour.value * 60 * 60 + spinMinute.value * 60 + spinSecond.value ) * 1000 )
-            }
-        }
-
-        //                DSM.FinalState {
-        //                    id: finalState
-        //                }
-        //                onFinished: Qt.quit()
     }
 
     Settings {
