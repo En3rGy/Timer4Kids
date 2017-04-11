@@ -12,6 +12,24 @@ Page2Form {
     signal pauseTimer
     signal timerTriggered
 
+    function isAlarm() {
+        return radioButtonAlarm.checked
+    }
+
+    function getAlarm() {
+        var alarmDate = new Date()
+
+        if ( alarmDate.getHours() < spinHour.value ) {
+            alarmDate.setDate( alarmDate.getDate() + 1 )
+        }
+
+        alarmDate.setHours( spinHour.value )
+        alarmDate.setMinutes( spinMinute.value )
+        alarmDate.setSeconds( spinSecond.value )
+
+        return alarmDate
+    }
+
     ColumnLayout {
         id: column
         anchors.fill: parent
@@ -19,7 +37,27 @@ Page2Form {
         GridLayout {
             id: grid
             columns: 2
-            rows: 4
+            rows: 5
+
+            Label {
+                text: ""
+            }
+
+            RowLayout {
+                ExclusiveGroup { id: tabPositionGroup }
+                RadioButton {
+                    id: radioButtonTimer
+                    Layout.fillWidth: true
+                    text: "Timer"
+                    checked: settings.bIsTimer
+                }
+                RadioButton {
+                    id: radioButtonAlarm
+                    Layout.fillWidth: true
+                    text: "Alarm"
+                    checked: settings.bIsAlarm
+                }
+            }
 
             Label {
                 text: "Hours"
@@ -62,6 +100,7 @@ Page2Form {
         }
 
     } // column
+
 
     function setButtonText( sVal ) {
         btnText = sVal
@@ -110,11 +149,15 @@ Page2Form {
         property int sec   : 0
         property int min   : 0
         property int hour  : 0
+        property bool bIsAlarm : false
+        property bool bIsTimer : true
     }
 
     Component.onDestruction: {
-        settings.sec = spinSecond.value
-        settings.min = spinMinute.value
+        settings.sec  = spinSecond.value
+        settings.min  = spinMinute.value
         settings.hour = spinHour.value
+        settings.bIsAlarm = radioButtonAlarm.checked
+        settings.bIsTimer = radioButtonTimer.checked
     }
 }

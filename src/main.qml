@@ -35,9 +35,6 @@ ApplicationWindow {
             page2.timerTriggered()
             uiUpdateTimer.stop()
             page1.labelTimerText = "00:00:00"
-            //page1.dialVisible = false
-            //page1.rectColor = "yellow"
-            //page1.labelColor = "white"
             page1.setProgress( 100 )
         }
     }
@@ -69,6 +66,13 @@ ApplicationWindow {
     }
 
     function setTimer( interval_ms ) {
+        var alarmDate = page2.getAlarm()
+        if ( page2.isAlarm() === true ) {
+            interval_ms = alarmDate - new Date()
+        }
+
+        console.debug( "alarmDate", alarmDate, "current", new Date() )
+
         timer.interval = interval_ms
         timer.start()
         uiUpdateTimer.start()
