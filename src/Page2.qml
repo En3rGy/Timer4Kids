@@ -30,77 +30,98 @@ Page2Form {
         return alarmDate
     }
 
-    ColumnLayout {
-        id: column
+    Flickable {
+        id: flickable
         anchors.fill: parent
+        contentWidth: parent.width
+        contentHeight: column.height
 
-        GridLayout {
-            id: grid
-            columns: 2
-            rows: 5
+        ColumnLayout {
+            id: column
+            width: parent.width - 10 // to show scroll bar
+            //anchors.fill : parent
 
-            Label {
-                text: ""
-            }
+            GridLayout {
+                id: grid
+                columns: 2
+                rows: 6
 
-            RowLayout {
-                ExclusiveGroup { id: tabPositionGroup }
-                RadioButton {
-                    id: radioButtonTimer
-                    Layout.fillWidth: true
-                    text: "Timer"
-                    checked: settings.bIsTimer
+                Label {
+                    text: ""
                 }
-                RadioButton {
-                    id: radioButtonAlarm
-                    Layout.fillWidth: true
-                    text: "Alarm"
-                    checked: settings.bIsAlarm
+
+                RowLayout {
+                    ExclusiveGroup { id: tabPositionGroup }
+                    RadioButton {
+                        id: radioButtonTimer
+                        Layout.fillWidth: true
+                        text: "Timer"
+                        checked: settings.bIsTimer
+                    }
+                    RadioButton {
+                        id: radioButtonAlarm
+                        Layout.fillWidth: true
+                        text: "Alarm"
+                        checked: settings.bIsAlarm
+                    }
                 }
-            }
 
-            Label {
-                text: "Hours"
-            }
+                Label {
+                    text: "Hours"
+                }
 
-            SpinBox {
-                Layout.fillWidth: true
-                id: spinHour
-                value : settings.hour
-            }
+                SpinBox {
+                    Layout.fillWidth: true
+                    id: spinHour
+                    value : settings.hour
+                }
 
-            Label {
-                text: "Minutes"
-            }
+                Label {
+                    text: "Minutes"
+                }
 
-            SpinBox {
-                Layout.fillWidth: true
-                id: spinMinute
-                to: 60
-                value : settings.min
-            }
+                SpinBox {
+                    Layout.fillWidth: true
+                    id: spinMinute
+                    to: 60
+                    value : settings.min
+                }
 
-            Label {
-                text: "Seconds"
-            }
+                Label {
+                    text: "Seconds"
+                }
 
-            SpinBox {
-                Layout.fillWidth: true
-                id: spinSecond
-                to: 60
-                value : settings.sec
-            }
+                SpinBox {
+                    Layout.fillWidth: true
+                    id: spinSecond
+                    to: 60
+                    value : settings.sec
+                }
 
-        } // grid
+                Label {
+                    text: ""
+                }
 
-        Button {
-            id: button
-            text: "Initializeing"
-            Layout.fillWidth: true
-        }
+                Button {
+                    id: button
+                    text: "Initializeing"
+                    Layout.fillWidth: true
+                }
 
-    } // column
+            } // grid
 
+
+        } // column
+    }
+
+    Rectangle {
+        id: scrollbar
+        anchors.right: flickable.right
+        y: flickable.visibleArea.yPosition * flickable.height
+        width: 10
+        height: flickable.visibleArea.heightRatio * flickable.height
+        color: "black"
+    }
 
     function setButtonText( sVal ) {
         btnText = sVal

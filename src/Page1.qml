@@ -1,3 +1,4 @@
+import QtQml 2.2
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
@@ -6,9 +7,8 @@ import QtQuick.Particles 2.0
 Page1Form {
     id: page1Form
     property alias labelTimerText : labelTimer.text
-    // property alias dialVisible: dial.visible
     property alias labelColor: labelTimer.color
-    property alias rectColor: rect.color
+    //property alias rectColor: rect.color
 
     property int imgWidth : 40
     property int imgHeight : 40
@@ -20,16 +20,18 @@ Page1Form {
         imgProgr.x = img5.x * ( prct / 100.0 )
 
         if ( prct === 100.0 ) {
-            imgSun.visible = true
+            //imgSun.visible = true
             img1.visible = false
             img2.visible = false
             img3.visible = false
             img4.visible = false
             img5.visible = false
             imgProgr.visible = false
+            imgSun.state = "visible"
         }
         else {
-            imgSun.visible = false
+            imgSun.state = "hidden"
+            //imgSun.visible = false
             img1.visible = true
             img2.visible = true
             img3.visible = true
@@ -77,16 +79,7 @@ Page1Form {
     Rectangle {
         id : rect
         anchors.fill: parent
-        color: "black"
-    }
-
-    Dial {
-        anchors.fill: parent
-        anchors.margins: 5
-        id: dial
-        stepSize: 1
-        to: 100
-        visible: false
+        //color: "black"
     }
 
     Label {
@@ -190,10 +183,35 @@ Page1Form {
     Image {
         id: imgSun
         source: "qrc:/img/happy-sun-gm.svg"
-        sourceSize.height: 150
-        sourceSize.width: 150
+        sourceSize.height: 110
+        sourceSize.width: 110
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         visible: false
-    }
+
+        states: [
+            State {
+                name: "visible"
+                PropertyChanges {
+                    target: imgSun
+                    visible: true
+                }
+            },
+            State {
+                name: "hidden"
+                PropertyChanges {
+                    target: imgSun
+                    visible: false
+                }
+            }
+        ]
+
+//        transitions: [
+//            Transition {
+//                from: "hidden"
+//                to: "visible"
+//                //SmoothedAnimation { property: "sourceSize.height,sourceSize.width"; duration: 5000 }
+//            }
+//        ]
+    } // image
 }
