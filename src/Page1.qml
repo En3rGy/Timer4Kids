@@ -10,34 +10,24 @@ Page1Form {
     property alias labelColor: labelTimer.color
     //property alias rectColor: rect.color
 
-    property int imgWidth : 40
-    property int imgHeight : 40
+    property int imgWidth : parent.height / 5
+    property int imgHeight : parent.height / 5
     property int imgAmount : 5
 
     function setProgress( prct ) {
-        dial.value = 100 - prct
-
         imgProgr.x = img5.x * ( prct / 100.0 )
 
         if ( prct === 100.0 ) {
-            //imgSun.visible = true
-            img1.visible = false
-            img2.visible = false
-            img3.visible = false
-            img4.visible = false
-            img5.visible = false
             imgProgr.visible = false
             imgSun.state = "visible"
+            rect.state = "color"
+            emitter.enabled = false
         }
         else {
             imgSun.state = "hidden"
-            //imgSun.visible = false
-            img1.visible = true
-            img2.visible = true
-            img3.visible = true
-            img4.visible = true
-            img5.visible = true
+            rect.state = "black"
             imgProgr.visible = true
+            emitter.enabled = true
         }
 
         if ( prct >= 100.0 / (imgAmount - 1) * 0 ) {
@@ -77,9 +67,9 @@ Page1Form {
     }
 
     Rectangle {
-        id : rect
+        id : rectBack
         anchors.fill: parent
-        //color: "black"
+        color: "black"
     }
 
     Label {
@@ -152,6 +142,7 @@ Page1Form {
 
         Emitter {
             id: emitter
+            enabled: false
             anchors.centerIn: parent
             width: 20; height: 20
             system: particleSystem
@@ -160,7 +151,6 @@ Page1Form {
             lifeSpanVariation: 500
             size: 10
             endSize: 32
-            //Tracer { color: 'green' }
             velocity: AngleDirection   {
                 angle: 180
                 angleVariation: 30
@@ -180,14 +170,49 @@ Page1Form {
         }
     }
 
+    Rectangle {
+        id : rect
+        anchors.fill: parent
+        color: "black"
+        opacity: 0
+
+        states: [
+            State {
+                name: "color"
+                PropertyChanges {
+                    target: rect
+                    color: "darkorange"
+                    opacity: 100
+                }
+            },
+            State {
+                name: "black"
+                PropertyChanges {
+                    target: rect
+                    color: "black"
+                    opacity: 0
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                from: "black"
+                to: "color"
+                OpacityAnimator{ duration: 2000; easing.type: Easing.InOutQuint }
+            }
+        ]
+    }
+
     Image {
         id: imgSun
         source: "qrc:/img/happy-sun-gm.svg"
-        sourceSize.height: 110
-        sourceSize.width: 110
+        sourceSize.height: parent.height * 0.8
+        sourceSize.width: parent.height * 0.8
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         visible: false
+        //rotation: -90
 
         states: [
             State {
@@ -205,13 +230,5 @@ Page1Form {
                 }
             }
         ]
-
-//        transitions: [
-//            Transition {
-//                from: "hidden"
-//                to: "visible"
-//                //SmoothedAnimation { property: "sourceSize.height,sourceSize.width"; duration: 5000 }
-//            }
-//        ]
     } // image
 }
