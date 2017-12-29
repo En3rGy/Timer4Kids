@@ -8,11 +8,11 @@ Page1Form {
     id: page1Form
     property alias labelTimerText : labelTimer.text
     property alias labelColor: labelTimer.color
-    //property alias rectColor: rect.color
 
     property int imgWidth : parent.height / 5
     property int imgHeight : parent.height / 5
     property int imgAmount : 5
+    property bool emitterActive
 
     function setProgress( prct ) {
         imgProgr.x = img5.x * ( prct / 100.0 )
@@ -27,7 +27,7 @@ Page1Form {
             imgSun.state = "hidden"
             rect.state = "black"
             imgProgr.visible = true
-            emitter.enabled = true
+            emitter.enabled = emitterActive
         }
 
         if ( prct >= 100.0 / (imgAmount - 1) * 0 ) {

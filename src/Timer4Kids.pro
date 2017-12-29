@@ -20,6 +20,9 @@ CONFIG(release) {
 win32:DEFINES += win32
 DESTDIR  = ../bin
 
+unix:target.path = /usr/local/$$TARGET
+INSTALLS += target
+
 SOURCES += main.cpp
 
 RESOURCES += qml.qrc \

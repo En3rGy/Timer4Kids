@@ -8,12 +8,15 @@ import Qt.labs.settings 1.0
 Page2Form {
 
     property alias btnText : button.text
+    property alias emitterActive : emitterSwitch.checked
+
     signal startTimer( double duration_ms )
     signal pauseTimer
     signal timerTriggered
+    signal emitterTriggered( bool bChecked )
 
     function isAlarm() {
-        return radioButtonAlarm.checked
+        return alarmSwitch.checked
     }
 
     function getAlarm() {
@@ -39,32 +42,27 @@ Page2Form {
         ColumnLayout {
             id: column
             width: parent.width - 10 // to show scroll bar
-            //anchors.fill : parent
+
+            Switch {
+                id: alarmSwitch
+                Layout.fillWidth: true
+                text: "Alarm (vs. Timer)"
+                checked: settings.bIsAlarm
+            }
+
+            Switch {
+                id: emitterSwitch
+                text: "Use particle emitter"
+                checked: settings.bEmitterEnabled
+                Layout.fillWidth: true
+
+                onCheckedChanged: emitterTriggered( checked );
+            }
 
             GridLayout {
                 id: grid
                 columns: 2
-                rows: 6
-
-                Label {
-                    text: ""
-                }
-
-                RowLayout {
-                    ExclusiveGroup { id: tabPositionGroup }
-                    RadioButton {
-                        id: radioButtonTimer
-                        Layout.fillWidth: true
-                        text: "Timer"
-                        checked: settings.bIsTimer
-                    }
-                    RadioButton {
-                        id: radioButtonAlarm
-                        Layout.fillWidth: true
-                        text: "Alarm"
-                        checked: settings.bIsAlarm
-                    }
-                }
+                rows: 3
 
                 Label {
                     text: "Hours"
@@ -97,22 +95,37 @@ Page2Form {
                     to: 60
                     value : settings.sec
                 }
-
-                Label {
-                    text: ""
-                }
-
-                Button {
-                    id: button
-                    text: "Initializeing"
-                    Layout.fillWidth: true
-                }
-
             } // grid
+
+            Button {
+                id: button
+                text: "Initializing"
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: " "
+            }
+
+            Button {
+                id: buttonQuit
+                text: "Quit"
+                Layout.fillWidth: true
+
+                onClicked: Qt.quit();
+            }
+
+            Label {
+                text: Qt.application.displayName + " v" + Qt.application.version + " by " + Qt.application.organization
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignRight
+            }
 
 
         } // column
-    }
+
+
+    } // flickable
 
     Rectangle {
         id: scrollbar
@@ -157,11 +170,6 @@ Page2Form {
                 startTimer( ( spinHour.value * 60 * 60 + spinMinute.value * 60 + spinSecond.value ) * 1000 )
             }
         }
-
-        //                DSM.FinalState {
-        //                    id: finalState
-        //                }
-        //                onFinished: Qt.quit()
     }
 
     Settings {
@@ -171,14 +179,14 @@ Page2Form {
         property int min   : 0
         property int hour  : 0
         property bool bIsAlarm : false
-        property bool bIsTimer : true
+        property bool bEmitterEnabled : true
     }
 
     Component.onDestruction: {
         settings.sec  = spinSecond.value
         settings.min  = spinMinute.value
         settings.hour = spinHour.value
-        settings.bIsAlarm = radioButtonAlarm.checked
-        settings.bIsTimer = radioButtonTimer.checked
+        settings.bIsAlarm = alarmSwitch.checked
+        settings.bEmitterEnabled = emitterSwitch.checked
     }
 }

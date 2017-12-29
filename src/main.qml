@@ -7,6 +7,7 @@ import QtQuick.Controls.Material 2.0
 ApplicationWindow {
     id: applicationWindow
     visible: true
+    visibility: "FullScreen"
     width: 320
     height: 240
     title: qsTr("Timer4Kids")
@@ -16,10 +17,7 @@ ApplicationWindow {
     Connections {
         target: page2
         onStartTimer: setTimer( duration_ms )
-    }
-
-    Connections {
-        target: page2
+        onEmitterTriggered: { page1.emitterActive = bChecked }
         onPauseTimer: {
             timer.stop()
             uiUpdateTimer.stop()
@@ -76,33 +74,34 @@ ApplicationWindow {
         timer.start()
         uiUpdateTimer.start()
         startTime = new Date().setTime( Date.now() )  // local
-        tabBar.currentIndex = 0
+        swipeView.currentIndex = 0
         page1.setProgress( 0 )
+        page1.emitterActive = page2.emitterActive
     }
 
     SwipeView {
         id: swipeView
         wheelEnabled: false
         anchors.fill: parent
-        currentIndex: tabBar.currentIndex
+        //currentIndex: tabBar.currentIndex
 
         Page1 {
             id: page1
         }
 
         Page2 {
-            id: page2
+            id: page2            
         }
     }
 
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
-        TabButton {
-            text: qsTr("Timer")
-        }
-        TabButton {
-            text: qsTr("Config")
-        }
-    }
+//    footer: TabBar {
+//        id: tabBar
+//        currentIndex: swipeView.currentIndex
+//        TabButton {
+//            text: qsTr("Timer")
+//        }
+//        TabButton {
+//            text: qsTr("Config")
+//        }
+//    } // footer
 }
