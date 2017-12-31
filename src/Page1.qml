@@ -70,6 +70,11 @@ Page1Form {
         id : rectBack
         anchors.fill: parent
         color: "black"
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.BlankCursor
+        }
     }
 
     Label {

@@ -18,15 +18,25 @@ CONFIG(release) {
 }
 
 win32:DEFINES += win32
+
 DESTDIR  = ../bin
 
 unix:target.path = /usr/local/$$TARGET
+win32:target.path =
 INSTALLS += target
+
+# Icons
+unix:icon.path = /usr/share/icons/hicolor/
+unix:icon.files = ressources/fleeting-star.xbm
+unix:INSTALLS += icon
+
+win32:RC_ICONS = ressources/fleeting-star.ico
 
 SOURCES += main.cpp
 
 RESOURCES += qml.qrc \
-    img.qrc
+    img.qrc \
+    ressource.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

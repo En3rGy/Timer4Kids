@@ -7,6 +7,8 @@ import Qt.labs.settings 1.0
 
 Page2Form {
 
+    id: page2
+
     property alias btnText : button.text
     property alias emitterActive : emitterSwitch.checked
 
@@ -33,103 +35,108 @@ Page2Form {
         return alarmDate
     }
 
-    Flickable {
-        id: flickable
+    Item {
         anchors.fill: parent
-        contentWidth: parent.width
-        contentHeight: column.height
+        anchors.margins: 9
 
-        ColumnLayout {
-            id: column
-            width: parent.width - 10 // to show scroll bar
+        Flickable {
+            id: flickable
+            anchors.fill: parent
+            contentWidth: parent.width
+            contentHeight: column.height
 
-            Switch {
-                id: alarmSwitch
-                Layout.fillWidth: true
-                text: "Alarm (vs. Timer)"
-                checked: settings.bIsAlarm
-            }
+            ColumnLayout {
+                id: column
+                width: parent.width - 10 // to show scroll bar
 
-            Switch {
-                id: emitterSwitch
-                text: "Use particle emitter"
-                checked: settings.bEmitterEnabled
-                Layout.fillWidth: true
+                Switch {
+                    id: alarmSwitch
+                    Layout.fillWidth: true
+                    text: "Alarm (vs. Timer)"
+                    checked: settings.bIsAlarm
+                }
 
-                onCheckedChanged: emitterTriggered( checked );
-            }
+                Switch {
+                    id: emitterSwitch
+                    text: "Use particle emitter"
+                    checked: settings.bEmitterEnabled
+                    Layout.fillWidth: true
 
-            GridLayout {
-                id: grid
-                columns: 2
-                rows: 3
+                    onCheckedChanged: emitterTriggered( checked );
+                }
+
+                GridLayout {
+                    id: grid
+                    columns: 2
+                    rows: 3
+
+                    Label {
+                        text: "Hours"
+                    }
+
+                    SpinBox {
+                        Layout.fillWidth: true
+                        id: spinHour
+                        value : settings.hour
+                    }
+
+                    Label {
+                        text: "Minutes"
+                    }
+
+                    SpinBox {
+                        Layout.fillWidth: true
+                        id: spinMinute
+                        to: 60
+                        value : settings.min
+                    }
+
+                    Label {
+                        text: "Seconds"
+                    }
+
+                    SpinBox {
+                        Layout.fillWidth: true
+                        id: spinSecond
+                        to: 60
+                        value : settings.sec
+                    }
+                } // grid
+
+                Button {
+                    id: button
+                    text: "Initializing"
+                    Layout.fillWidth: true
+                }
 
                 Label {
-                    text: "Hours"
+                    text: " "
                 }
 
-                SpinBox {
+                Button {
+                    id: buttonQuit
+                    text: "Quit"
                     Layout.fillWidth: true
-                    id: spinHour
-                    value : settings.hour
+
+                    onClicked: Qt.quit();
                 }
 
                 Label {
-                    text: "Minutes"
-                }
-
-                SpinBox {
+                    text: Qt.application.displayName + " v" + Qt.application.version + " by " + Qt.application.organization
                     Layout.fillWidth: true
-                    id: spinMinute
-                    to: 60
-                    value : settings.min
+                    horizontalAlignment: Text.AlignRight
                 }
 
-                Label {
-                    text: "Seconds"
-                }
 
-                SpinBox {
-                    Layout.fillWidth: true
-                    id: spinSecond
-                    to: 60
-                    value : settings.sec
-                }
-            } // grid
-
-            Button {
-                id: button
-                text: "Initializing"
-                Layout.fillWidth: true
-            }
-
-            Label {
-                text: " "
-            }
-
-            Button {
-                id: buttonQuit
-                text: "Quit"
-                Layout.fillWidth: true
-
-                onClicked: Qt.quit();
-            }
-
-            Label {
-                text: Qt.application.displayName + " v" + Qt.application.version + " by " + Qt.application.organization
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignRight
-            }
+            } // column
 
 
-        } // column
-
-
-    } // flickable
+        } // flickable
+    }
 
     Rectangle {
         id: scrollbar
-        anchors.right: flickable.right
+        anchors.right: page2.right
         y: flickable.visibleArea.yPosition * flickable.height
         width: 10
         height: flickable.visibleArea.heightRatio * flickable.height
