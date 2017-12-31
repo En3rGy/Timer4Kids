@@ -11,13 +11,14 @@ ApplicationWindow {
     width: 320
     height: 240
     title: qsTr("Timer4Kids")
-
     Material.theme: Material.Dark
 
     Connections {
         target: page2
-        onStartTimer: setTimer( duration_ms )
-        onEmitterTriggered: { page1.emitterActive = bChecked }
+        onStartTimer: {
+            page1.positionStart()
+            setTimer( duration_ms )
+        }
         onPauseTimer: {
             timer.stop()
             uiUpdateTimer.stop()
@@ -42,7 +43,7 @@ ApplicationWindow {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            var currentTime   = new Date( Date.now() ) // local
+            var currentTime   = new Date().setTime( Date.now() ) // local
             var elapsedTime   = currentTime - startTime
             var remainTime    = new Date( timer.interval - elapsedTime + 1000 )
 
@@ -59,16 +60,24 @@ ApplicationWindow {
             var sSs = ( ss < 10 ) ? ( "0" + ss.toString() ) : ss.toString()
 
             page1.labelTimerText = sHh + ":" + sMm + ":" + sSs
+
+            page1.updateIndicator();
         }
     }
 
     function setTimer( interval_ms ) {
         var alarmDate = page2.getAlarm()
+        var currDate  = new Date();
+
         if ( page2.isAlarm() === true ) {
-            interval_ms = alarmDate - new Date()
+            if ( alarmDate < currDate ) {
+                alarmDate.setDate( alarmDate.getDate() + 1 )
+            }
+
+            interval_ms = alarmDate - currDate
         }
 
-        console.debug( "alarmDate", alarmDate, "current", new Date() )
+        console.debug( "alarmDate", alarmDate, "current", currDate, "interval_ms", interval_ms )
 
         timer.interval = interval_ms
         timer.start()
@@ -76,7 +85,6 @@ ApplicationWindow {
         startTime = new Date().setTime( Date.now() )  // local
         swipeView.currentIndex = 0
         page1.setProgress( 0 )
-        page1.emitterActive = page2.emitterActive
     }
 
     SwipeView {
