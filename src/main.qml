@@ -64,11 +64,15 @@ ApplicationWindow {
 
     function setTimer( interval_ms ) {
         var alarmDate = page2.getAlarm()
-        if ( page2.isAlarm() === true ) {
-            interval_ms = alarmDate - new Date()
-        }
+        var currDate  = new Date();
 
-        console.debug( "alarmDate", alarmDate, "current", new Date() )
+        if ( page2.isAlarm() === true ) {
+            if ( alarmDate < currDate ) {
+                alarmDate.setDate( alarmDate.getDate() + 1 )
+            }
+
+            interval_ms = alarmDate - currDate
+        }
 
         timer.interval = interval_ms
         timer.start()

@@ -35,8 +35,7 @@ win32:RC_ICONS = ressources/fleeting-star.ico
 SOURCES += main.cpp
 
 RESOURCES += qml.qrc \
-    img.qrc \
-    ressource.qrc
+    img.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
