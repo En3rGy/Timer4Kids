@@ -87,7 +87,6 @@ ApplicationWindow {
         id: swipeView
         wheelEnabled: false
         anchors.fill: parent
-        //currentIndex: tabBar.currentIndex
 
         Page1 {
             id: page1
@@ -97,15 +96,4 @@ ApplicationWindow {
             id: page2            
         }
     }
-
-//    footer: TabBar {
-//        id: tabBar
-//        currentIndex: swipeView.currentIndex
-//        TabButton {
-//            text: qsTr("Timer")
-//        }
-//        TabButton {
-//            text: qsTr("Config")
-//        }
-//    } // footer
 }

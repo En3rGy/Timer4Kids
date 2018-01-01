@@ -16,6 +16,14 @@ Page2Form {
     signal pauseTimer
     signal timerTriggered
     signal emitterTriggered( bool bChecked )
+    signal signal_autostart
+
+    function autostart() {
+        if ( autostartSwitch.checked === true ) {
+            console.debug("Autostart")
+            signal_autostart()
+        }
+    }
 
     function isAlarm() {
         return alarmSwitch.checked
@@ -63,6 +71,13 @@ Page2Form {
                     Layout.fillWidth: true
 
                     onCheckedChanged: emitterTriggered( checked );
+                }
+
+                Switch {
+                    id: autostartSwitch
+                    text: "Auto start"
+                    checked: settings.bAutostartEnabled
+                    Layout.fillWidth: true
                 }
 
                 GridLayout {
@@ -157,7 +172,12 @@ Page2Form {
                 targetState: running
                 signal: button.clicked
             }
+            DSM.SignalTransition {
+                targetState: running
+                signal: signal_autostart
+            }
             onEntered: {
+                console.debug( "stopped state" )
                 setButtonText( "Start" )
                 pauseTimer()
             }
@@ -173,10 +193,13 @@ Page2Form {
                 signal: onTimerTriggered
             }
             onEntered: {
+                console.debug( "running state" )
                 setButtonText( "Stop" )
                 startTimer( ( spinHour.value * 60 * 60 + spinMinute.value * 60 + spinSecond.value ) * 1000 )
             }
         }
+
+        onStarted: autostart()
     }
 
     Settings {
@@ -187,6 +210,7 @@ Page2Form {
         property int hour  : 0
         property bool bIsAlarm : false
         property bool bEmitterEnabled : true
+        property bool bAutostartEnabled : false
     }
 
     Component.onDestruction: {
@@ -195,5 +219,6 @@ Page2Form {
         settings.hour = spinHour.value
         settings.bIsAlarm = alarmSwitch.checked
         settings.bEmitterEnabled = emitterSwitch.checked
+        settings.bAutostartEnabled = autostartSwitch
     }
 }
