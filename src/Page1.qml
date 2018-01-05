@@ -14,55 +14,56 @@ Page1Form {
     property int imgAmount : 5
     property bool emitterActive
 
+    property bool bImg1Passed : false
+    property bool bImg2Passed : false
+    property bool bImg3Passed : false
+    property bool bImg4Passed : false
+    property bool bImg5Passed : false
+
     function setProgress( prct ) {
         imgProgr.x = img5.x * ( prct / 100.0 )
 
-        if ( prct === 100.0 ) {
+        if ( prct >= 100.0 ) {
             imgProgr.visible = false
             imgSun.state = "visible"
             rect.state = "color"
             emitter.enabled = false
         }
-        else {
+        else if ( prct === 0.0 ) {
             imgSun.state = "hidden"
             rect.state = "black"
             imgProgr.visible = true
             emitter.enabled = emitterActive
-        }
-
-        if ( prct >= 100.0 / (imgAmount - 1) * 0 ) {
-            img1.source = "qrc:/img/star_gold.svg"
-        }
-        else {
+            bImg1Passed = false
+            bImg2Passed = false
+            bImg3Passed = false
+            bImg4Passed = false
+            bImg5Passed = false
             img1.source = "qrc:/img/star_silver.svg"
-        }
-
-        if ( prct >= 100.0 / (imgAmount - 1) * 1 ) {
-            img2.source = "qrc:/img/star_gold.svg"
-        }
-        else {
             img2.source = "qrc:/img/star_silver.svg"
-        }
-
-        if ( prct >= 100.0 / (imgAmount - 1) * 2 ) {
-            img3.source = "qrc:/img/star_gold.svg"
-        }
-        else {
             img3.source = "qrc:/img/star_silver.svg"
-        }
-
-        if ( prct >= 100.0 /  (imgAmount - 1) * 3  ) {
-            img4.source = "qrc:/img/star_gold.svg"
-        }
-        else {
             img4.source = "qrc:/img/star_silver.svg"
-        }
-
-        if ( prct >= 100.0 / (imgAmount - 1) * 4 ) {
-            img5.source = "qrc:/img/star_gold.svg"
-        }
-        else {
             img5.source = "qrc:/img/star_silver.svg"
+        }
+        else if ( ( prct >= 100.0 / (imgAmount - 1) * 0 ) && ( bImg1Passed === false ) ) { // img 1
+            img1.source = "qrc:/img/star_gold.svg"
+            bImg1Passed = true
+        }
+        else if ( ( prct >= 100.0 / (imgAmount - 1) * 1 ) && ( bImg2Passed === false ) ) { // img 2
+            img2.source = "qrc:/img/star_gold.svg"
+            bImg2Passed = true
+        }
+        else if ( ( prct >= 100.0 / (imgAmount - 1) * 2 ) && ( bImg3Passed === false ) ) { // img 3
+            img3.source = "qrc:/img/star_gold.svg"
+            bImg3Passed = true
+        }
+        else if ( ( prct >= 100.0 /  (imgAmount - 1) * 3  ) && ( bImg4Passed === false ) ) { // img 4
+            img4.source = "qrc:/img/star_gold.svg"
+            bImg4Passed = true
+        }
+        else if ( ( prct >= 100.0 / (imgAmount - 1) * 4 ) && ( bImg5Passed === false ) ) { // img 5
+            img5.source = "qrc:/img/star_gold.svg"
+            bImg5Passed = true
         }
     }
 
@@ -151,7 +152,7 @@ Page1Form {
             anchors.centerIn: parent
             width: 20; height: 20
             system: particleSystem
-            emitRate: 20
+            emitRate: 5
             lifeSpan: 1000
             lifeSpanVariation: 500
             size: 10

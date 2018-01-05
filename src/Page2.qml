@@ -20,7 +20,6 @@ Page2Form {
 
     function autostart() {
         if ( autostartSwitch.checked === true ) {
-            console.debug("Autostart")
             signal_autostart()
         }
     }
@@ -30,9 +29,9 @@ Page2Form {
     }
 
     function getAlarm() {
-        var alarmDate = new Date()
+        var alarmDate = new Date( Date.now() )
 
-        if ( alarmDate.getHours() < spinHour.value ) {
+        if ( spinHour.value < alarmDate.getHours() ) {
             alarmDate.setDate( alarmDate.getDate() + 1 )
         }
 
@@ -141,11 +140,7 @@ Page2Form {
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
-
-
             } // column
-
-
         } // flickable
     }
 
@@ -177,7 +172,7 @@ Page2Form {
                 signal: signal_autostart
             }
             onEntered: {
-                console.debug( "stopped state" )
+                console.debug( "stoped state" )
                 setButtonText( "Start" )
                 pauseTimer()
             }
