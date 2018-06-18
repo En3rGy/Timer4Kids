@@ -10,12 +10,10 @@ Page2Form {
     id: page2
 
     property alias btnText : button.text
-    property alias emitterActive : emitterSwitch.checked
 
     signal startTimer( double duration_ms )
     signal pauseTimer
     signal timerTriggered
-    signal emitterTriggered( bool bChecked )
     signal signal_autostart
 
     function autostart() {
@@ -61,15 +59,6 @@ Page2Form {
                     Layout.fillWidth: true
                     text: "Alarm (vs. Timer)"
                     checked: settings.bIsAlarm
-                }
-
-                Switch {
-                    id: emitterSwitch
-                    text: "Use particle emitter"
-                    checked: settings.bEmitterEnabled
-                    Layout.fillWidth: true
-
-                    onCheckedChanged: emitterTriggered( checked );
                 }
 
                 Switch {
@@ -204,7 +193,6 @@ Page2Form {
         property int min   : 0
         property int hour  : 0
         property bool bIsAlarm : false
-        property bool bEmitterEnabled : true
         property bool bAutostartEnabled : false
     }
 
@@ -213,7 +201,6 @@ Page2Form {
         settings.min  = spinMinute.value
         settings.hour = spinHour.value
         settings.bIsAlarm = alarmSwitch.checked
-        settings.bEmitterEnabled = emitterSwitch.checked
         settings.bAutostartEnabled = autostartSwitch
     }
 }
