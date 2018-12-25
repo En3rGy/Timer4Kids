@@ -19,7 +19,6 @@ ApplicationWindow {
             console.log( "Timer started" )
             page1.bgColor = "black"
 //            page1.setCircleColor( "#000032" )
-//            page1.setBgCircleColor(  "#000032" )
             setTimer( duration_ms )
         }
         onPauseTimer: {
