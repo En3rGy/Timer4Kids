@@ -18,7 +18,6 @@ ApplicationWindow {
         onStartTimer: {
             console.log( "Timer started" )
             page1.bgColor = "black"
-//            page1.setCircleColor( "#000032" )
             setTimer( duration_ms )
         }
         onPauseTimer: {
@@ -74,6 +73,7 @@ ApplicationWindow {
         }
 
         page1.setCircleVisible( true )
+        page1.setBgCircleColor( "midnightblue" )
 
         timer.interval = interval_ms
         timer.start()

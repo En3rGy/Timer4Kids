@@ -6,9 +6,8 @@ import QtQuick.Layouts 1.3
 Item {
     id: page1Form
 
-    property string colorGrey: "lightgray" // former: "#E6E6E6"
-    property string finishedColor : "#000032"
-    property alias bgColor : rectBack.color
+    property string bgCircleColor : "midnightblue"
+    property alias  bgColor : rectBack.color
 
     function setCircleVisible( bVisible ) {
         circleSec.visible   = bVisible
@@ -16,10 +15,13 @@ Item {
         circleHoure.visible = bVisible
     }
 
-    function setCircleColor( sColor ) {
-        if ( bgCircleSec.colorCircle !== sColor ) {
-            console.log( "setCircleColor: " + sColor )
+    function setBgCircleColor( sColor ) {
 
+        /// @bug bg color resetting from gold back to midnhight blue does not work;
+        // Removing the if sentence leads to not setting the color to gold after finish...?!?
+        // Try to hide the circles before setting the color and make the visible again afterwards
+
+        if ( bgCircleSec.colorCircle !== sColor ) {
             bgCircleSec.colorCircle = sColor
             bgCircleSec.arcBegin = 1
             bgCircleSec.arcEnd = 360
@@ -31,18 +33,18 @@ Item {
             bgCircleH.colorCircle = sColor
             bgCircleH.arcBegin = 1
             bgCircleH.arcEnd = 360
-
         }
     }
 
 
     function setProgress( remainTime_ms ) {
+
+        // timer finished
         if ( remainTime_ms <= 0.0 ) {
-            //setCircleVisible( true )
-            //rectBack.color = "gold"
-            setCircleColor( "gold " )
+            setBgCircleColor( "gold" )
         }
 
+        // reduce foreground circles w.r.t. progress
         else {
             var remain_s = remainTime_ms / 1000
 
@@ -124,18 +126,17 @@ Item {
             id : bgCircleSec
             anchors.centerIn: parent
             size: Math.min( parent.width, parent.height ) * 0.5
-            colorCircle: finishedColor
+            colorCircle: bgCircleColor
             arcBegin: 0
             arcEnd: 360
             lineWidth: 10
-            z: 5
         }
 
         ProgressCircle {
             id : bgCircleMin
             anchors.centerIn: parent
             size: Math.min( parent.width, parent.height ) * 0.7
-            colorCircle: finishedColor
+            colorCircle: bgCircleColor
             arcBegin: 0
             arcEnd: 360
             lineWidth: 10
@@ -145,7 +146,7 @@ Item {
             id : bgCircleH
             anchors.centerIn: parent
             size: Math.min( parent.width, parent.height ) * 0.9
-            colorCircle: finishedColor
+            colorCircle: bgCircleColor
             arcBegin: 0
             arcEnd: 360
             lineWidth: 10
