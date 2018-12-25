@@ -8,42 +8,45 @@ import Qt.labs.settings 1.0
 Page2Form {
     id: page2
 
-    property alias btnText : button.text
-
     signal startTimer( double duration_ms )
     signal pauseTimer
     signal timerTriggered
     signal signal_autostart
 
     function autostart() {
-        if ( autostartSwitch.checked === true ) {
+        if ( page2ui.autostartSwitchChecked === true ) {
             signal_autostart()
         }
     }
 
     function isAlarm() {
-        return alarmSwitch.checked
+        return page2ui.alarmSwitchChecked
     }
 
     function getAlarm() {
         var alarmDate = new Date( Date.now() )
 
-        if ( spinHour.value < alarmDate.getHours() ) {
+        if ( page2ui.spinHourValue < alarmDate.getHours() ) {
             alarmDate.setDate( alarmDate.getDate() + 1 )
         }
 
-        alarmDate.setHours( spinHour.value )
-        alarmDate.setMinutes( spinMinute.value )
-        alarmDate.setSeconds( spinSecond.value )
+        alarmDate.setHours( page2ui.spinHourValue )
+        alarmDate.setMinutes( page2ui.spinMinuteValue )
+        alarmDate.setSeconds( page2ui.spinSecondValue )
 
         return alarmDate
     }
 
-    function setButtonText( sVal ) {
-        btnText = sVal
-    }
-
     Item {
+        id: page2ui
+
+        property alias spinSecondValue   : spinSecond.value
+        property alias spinMinuteValue   : spinMinute.value
+        property alias spinHourValue     : spinHour.value
+        property alias alarmSwitchChecked: alarmSwitch.checked
+        property alias autostartSwitchChecked: autostartSwitch.checked
+        property alias buttonStateText: buttonState.text
+
         anchors.fill: parent
         anchors.margins: 9
 
@@ -135,10 +138,10 @@ Page2Form {
 
                 RowLayout {
                     Layout.fillWidth: true
-                    spacing: width / 3
+                    spacing: parent.width / 3
 
                     Button {
-                        id: button
+                        id: buttonState
                         text: "Initializing"
                         Layout.fillWidth: true
                     }
@@ -178,7 +181,7 @@ Page2Form {
             id: stoped
             DSM.SignalTransition {
                 targetState: running
-                signal: button.clicked
+                signal: buttonState.clicked
             }
             DSM.SignalTransition {
                 targetState: running
@@ -186,7 +189,7 @@ Page2Form {
             }
             onEntered: {
                 console.debug( "stoped state" )
-                setButtonText( "Start" )
+                page2ui.buttonStateText = "Start"
                 pauseTimer()
             }
         }
@@ -194,7 +197,7 @@ Page2Form {
             id: running
             DSM.SignalTransition {
                 targetState: stoped
-                signal: button.clicked
+                signal: buttonState.clicked
             }
             DSM.SignalTransition {
                 targetState: stoped
@@ -202,8 +205,8 @@ Page2Form {
             }
             onEntered: {
                 console.debug( "running state" )
-                setButtonText( "Stop" )
-                startTimer( ( spinHour.value * 60 * 60 + spinMinute.value * 60 + spinSecond.value ) * 1000 )
+                page2ui.buttonStateText = "Stop"
+                startTimer( ( page2ui.spinHourValue * 60 * 60 + page2ui.spinMinuteValue * 60 + page2ui.spinSecondValue ) * 1000 )
             }
         }
 
@@ -221,10 +224,10 @@ Page2Form {
     }
 
     Component.onDestruction: {
-        settings.sec               = spinSecond.value
-        settings.min               = spinMinute.value
-        settings.hour              = spinHour.value
-        settings.bIsAlarm          = alarmSwitch.checked
-        settings.bAutostartEnabled = autostartSwitch
+        settings.sec               = page2ui.spinSecondValue
+        settings.min               = page2ui.spinMinuteValue
+        settings.hour              = page2ui.spinHourValue
+        settings.bIsAlarm          = page2ui.alarmSwitchChecked
+        settings.bAutostartEnabled = page2ui.autostartSwitchChecked
     }
 }
