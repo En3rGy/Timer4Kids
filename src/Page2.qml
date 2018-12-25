@@ -6,7 +6,6 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
 Page2Form {
-
     id: page2
 
     property alias btnText : button.text
@@ -38,6 +37,10 @@ Page2Form {
         alarmDate.setSeconds( spinSecond.value )
 
         return alarmDate
+    }
+
+    function setButtonText( sVal ) {
+        btnText = sVal
     }
 
     Item {
@@ -130,22 +133,23 @@ Page2Form {
                     }
                 }
 
-                Button {
-                    id: button
-                    text: "Initializing"
+                RowLayout {
                     Layout.fillWidth: true
-                }
+                    spacing: width / 3
 
-                Label {
-                    text: " "
-                }
+                    Button {
+                        id: button
+                        text: "Initializing"
+                        Layout.fillWidth: true
+                    }
 
-                Button {
-                    id: buttonQuit
-                    text: "Quit"
-                    Layout.fillWidth: true
+                    Button {
+                        id: buttonQuit
+                        text: "Quit"
+                        Layout.fillWidth: true
 
-                    onClicked: Qt.quit();
+                        onClicked: Qt.quit();
+                    }
                 }
 
                 Label {
@@ -164,10 +168,6 @@ Page2Form {
         width: 10
         height: flickable.visibleArea.heightRatio * flickable.height
         color: "black"
-    }
-
-    function setButtonText( sVal ) {
-        btnText = sVal
     }
 
     DSM.StateMachine {
@@ -221,10 +221,10 @@ Page2Form {
     }
 
     Component.onDestruction: {
-        settings.sec  = spinSecond.value
-        settings.min  = spinMinute.value
-        settings.hour = spinHour.value
-        settings.bIsAlarm = alarmSwitch.checked
+        settings.sec               = spinSecond.value
+        settings.min               = spinMinute.value
+        settings.hour              = spinHour.value
+        settings.bIsAlarm          = alarmSwitch.checked
         settings.bAutostartEnabled = autostartSwitch
     }
 }
