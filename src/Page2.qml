@@ -54,57 +54,81 @@ Page2Form {
                 id: column
                 width: parent.width - 10 // to show scroll bar
 
-                Switch {
-                    id: alarmSwitch
+                RowLayout {
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
-                    text: "Alarm (vs. Timer)"
-                    checked: settings.bIsAlarm
+                    Switch {
+                        id: alarmSwitch
+                        Layout.fillWidth: true
+                        text: "Is Alarm (instead of Timer)"
+                        checked: settings.bIsAlarm
+                    }
+
+                    Switch {
+                        id: autostartSwitch
+                        text: "Auto start"
+                        checked: settings.bAutostartEnabled
+                        Layout.fillWidth: true
+                    }
                 }
 
-                Switch {
-                    id: autostartSwitch
-                    text: "Auto start"
-                    checked: settings.bAutostartEnabled
+                RowLayout {
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
+
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+
+                        Label {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
+                            text: "Hours"
+                        }
+
+                        SpinBox {
+                            Layout.fillWidth: true
+                            id: spinHour
+                            value : settings.hour
+                        }
+                    }
+
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+
+                        Label {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
+                            text: "Minutes"
+                        }
+
+                        SpinBox {
+                            Layout.fillWidth: true
+                            id: spinMinute
+                            to: 60
+                            value : settings.min
+                        }
+                    }
+
+                    ColumnLayout {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+
+                        Label {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Text.AlignHCenter
+                            text: "Seconds"
+                        }
+
+                        SpinBox {
+                            Layout.fillWidth: true
+                            id: spinSecond
+                            to: 60
+                            value : settings.sec
+                        }
+                    }
                 }
-
-                GridLayout {
-                    id: grid
-                    columns: 2
-                    rows: 3
-
-                    Label {
-                        text: "Hours"
-                    }
-
-                    SpinBox {
-                        Layout.fillWidth: true
-                        id: spinHour
-                        value : settings.hour
-                    }
-
-                    Label {
-                        text: "Minutes"
-                    }
-
-                    SpinBox {
-                        Layout.fillWidth: true
-                        id: spinMinute
-                        to: 60
-                        value : settings.min
-                    }
-
-                    Label {
-                        text: "Seconds"
-                    }
-
-                    SpinBox {
-                        Layout.fillWidth: true
-                        id: spinSecond
-                        to: 60
-                        value : settings.sec
-                    }
-                } // grid
 
                 Button {
                     id: button

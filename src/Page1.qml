@@ -2,22 +2,59 @@ import QtQml 2.2
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
-import QtQuick.Particles 2.0
 
 Page1Form {
     id: page1Form
 
-    function setProgress( remainTime_ms ) {
+    property string finishedColor : "#000032"
+    property alias bgColor : rectBack.color
 
-        if ( remainTime_ms === 0.0 ) {
-            imgProgr.visible = false
-            imgSun.state = "visible"
-            rect.state = "color"
+    function setCircleVisible( bVisible ) {
+        circleSec.visible   = bVisible
+        circleMin.visible   = bVisible
+        circleHoure.visible = bVisible
+    }
+
+    function setBgCircleColor( sColor ) {
+        if ( bgCircleSec.colorBackground !== sColor ) {
+            console.log( "setBgCircleColor: " + sColor )
+
+            bgCircleSec.colorBackground = sColor
+            bgCircleMin.colorBackground = sColor
+            bgCircleH.colorBackground   = sColor
+        }
+    }
+
+    function setCircleColor( sColor ) {
+        if ( bgCircleSec.colorCircle !== sColor ) {
+            console.log( "setCircleColor: " + sColor )
+
+            bgCircleSec.colorCircle = sColor
+            bgCircleSec.arcBegin = 1
+            bgCircleSec.arcEnd = 360
+
+            bgCircleMin.colorCircle = sColor
+            bgCircleMin.arcBegin = 1
+            bgCircleMin.arcEnd = 360
+
+            bgCircleH.colorCircle = sColor
+            bgCircleH.arcBegin = 1
+            bgCircleH.arcEnd = 360
+
+        }
+    }
+
+
+    function setProgress( remainTime_ms ) {
+        if ( remainTime_ms <= 0.0 ) {
+            //setCircleVisible( true )
+            //rectBack.color = "gold"
+            setCircleColor( "gold " )
+            setBgCircleColor( "gold" )
         }
 
         else {
-            imgSun.state = "hidden"
-            rect.state = "black"
+            setBgCircleColor( finishedColor )
 
             var remain_s = remainTime_ms / 1000
 
@@ -52,34 +89,34 @@ Page1Form {
         for ( var i = 0; i < 60; ++i ) {
             component.createObject(rectBack, {
                                        "anchors.centerIn": rectBack,
-                                       "size": Math.min( rectBack.width, rectBack.height ) * 0.5,
+                                       "size": Math.min( rectBack.width, rectBack.height ) * 0.5 + 5,
                                        "colorCircle": "black",
                                        "colorBackground": "#E6E6E6",
                                        "arcBegin": i * 360 / 60 - 1,
                                        "arcEnd": i * 360 / 60 + 1,
-                                       "lineWidth": 12,
+                                       "lineWidth": 20,
                                        "z": 10 });
 
             component.createObject(rectBack, {
                                        "anchors.centerIn": rectBack,
-                                       "size": Math.min( rectBack.width, rectBack.height ) * 0.7,
+                                       "size": Math.min( rectBack.width, rectBack.height ) * 0.7 + 5,
                                        "colorCircle": "black",
                                        "colorBackground": "#E6E6E6",
                                        "arcBegin": i * 360 / 60 - 1,
                                        "arcEnd": i * 360 / 60 + 1,
-                                       "lineWidth": 12,
+                                       "lineWidth": 20,
                                        "z": 10 });
         }
 
         for ( var j = 0; j < 24; ++j ) {
             component.createObject(rectBack, {
                                        "anchors.centerIn": rectBack,
-                                       "size": Math.min( rectBack.width, rectBack.height ) * 0.9,
+                                       "size": Math.min( rectBack.width, rectBack.height ) * 0.9 + 5,
                                        "colorCircle": "black",
                                        "colorBackground": "#E6E6E6",
                                        "arcBegin": j * 360 / 24 - 1,
                                        "arcEnd": j * 360 / 24 + 1,
-                                       "lineWidth": 12,
+                                       "lineWidth": 20,
                                        "z": 10 });
         }
     }
@@ -93,6 +130,41 @@ Page1Form {
             anchors.fill: parent
             cursorShape: Qt.BlankCursor
         }
+
+        ProgressCircle {
+            id : bgCircleSec
+            anchors.centerIn: parent
+            size: Math.min( parent.width, parent.height ) * 0.5
+            colorCircle: finishedColor
+            colorBackground: "#E6E6E6"
+            arcBegin: 0
+            arcEnd: 360
+            lineWidth: 10
+            z: 5
+        }
+
+        ProgressCircle {
+            id : bgCircleMin
+            anchors.centerIn: parent
+            size: Math.min( parent.width, parent.height ) * 0.7
+            colorCircle: finishedColor
+            colorBackground: "#E6E6E6"
+            arcBegin: 0
+            arcEnd: 360
+            lineWidth: 10
+        }
+
+        ProgressCircle {
+            id : bgCircleH
+            anchors.centerIn: parent
+            size: Math.min( parent.width, parent.height ) * 0.9
+            colorCircle: finishedColor
+            colorBackground: "#E6E6E6"
+            arcBegin: 0
+            arcEnd: 360
+            lineWidth: 10
+        }
+
 
         ProgressCircle {
             id : circleSec
@@ -129,70 +201,5 @@ Page1Form {
 
             Component.onCompleted: finishCreation();
         }
-
-
-
     }
-
-    Rectangle {
-        id : rect
-        anchors.fill: parent
-        color: "black"
-        opacity: 0
-
-        states: [
-            State {
-                name: "color"
-                PropertyChanges {
-                    target: rect
-                    color: "darkorange"
-                    opacity: 100
-                }
-            },
-            State {
-                name: "black"
-                PropertyChanges {
-                    target: rect
-                    color: "black"
-                    opacity: 0
-                }
-            }
-        ]
-
-        transitions: [
-            Transition {
-                from: "black"
-                to: "color"
-                OpacityAnimator{ duration: 2000; easing.type: Easing.InOutQuint }
-            }
-        ]
-    }
-
-    Image {
-        id: imgSun
-        source: "qrc:/img/happy-sun-gm.svg"
-        sourceSize.height: parent.height * 0.8
-        sourceSize.width: parent.height * 0.8
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: false
-        //rotation: -90
-
-        states: [
-            State {
-                name: "visible"
-                PropertyChanges {
-                    target: imgSun
-                    visible: true
-                }
-            },
-            State {
-                name: "hidden"
-                PropertyChanges {
-                    target: imgSun
-                    visible: false
-                }
-            }
-        ]
-    } // image
 }

@@ -15,7 +15,13 @@ ApplicationWindow {
 
     Connections {
         target: page2
-        onStartTimer: setTimer( duration_ms )
+        onStartTimer: {
+            console.log( "Timer started" )
+            page1.bgColor = "black"
+//            page1.setCircleColor( "#000032" )
+//            page1.setBgCircleColor(  "#000032" )
+            setTimer( duration_ms )
+        }
         onPauseTimer: {
             timer.stop()
             uiUpdateTimer.stop()
@@ -27,6 +33,7 @@ ApplicationWindow {
         onTriggered: {
             page2.timerTriggered()
             uiUpdateTimer.stop()
+            timer.stop()
             page1.setProgress( 0.0 )
         }
     }
@@ -47,6 +54,10 @@ ApplicationWindow {
             elapsedTime_ms = Date.now() - startTime
             remainTime_ms  = timerInt - elapsedTime_ms
 
+            if ( remainTime_ms <= 0.0 ) {
+                uiUpdateTimer.stop()
+            }
+
             page1.setProgress( remainTime_ms )
         }
     }
@@ -63,8 +74,11 @@ ApplicationWindow {
             interval_ms = alarmDate - currDate
         }
 
+        page1.setCircleVisible( true )
+
         timer.interval = interval_ms
         timer.start()
+
         uiUpdateTimer.start()
         startTime = Date.now()
         swipeView.currentIndex = 0
