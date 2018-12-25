@@ -5,7 +5,7 @@ import QtQml.StateMachine 1.0 as DSM
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 
-Page2Form {
+Item {
     id: page2
 
     signal startTimer( double duration_ms )
@@ -37,7 +37,12 @@ Page2Form {
         return alarmDate
     }
 
-    Item {
+    Connections {
+        target: buttonQuit
+        onClicked: Qt.quit();
+    }
+
+    Page2Form {
         id: page2ui
 
         property alias spinSecondValue   : spinSecond.value
@@ -150,8 +155,6 @@ Page2Form {
                         id: buttonQuit
                         text: "Quit"
                         Layout.fillWidth: true
-
-                        onClicked: Qt.quit();
                     }
                 }
 
