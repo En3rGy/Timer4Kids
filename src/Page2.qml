@@ -44,7 +44,7 @@ Item {
 
     Page2Form {
         id: page2ui
-    } // Page2Form
+    }
 
     Rectangle {
         id: scrollbar
@@ -71,7 +71,7 @@ Item {
             }
             onEntered: {
                 console.debug( "stoped state" )
-                page2ui.buttonStateText = "Start"
+                page2ui.buttonState.text = "Start"
                 pauseTimer()
             }
         }
@@ -87,7 +87,7 @@ Item {
             }
             onEntered: {
                 console.debug( "running state" )
-                page2ui.buttonStateText = "Stop"
+                page2ui.buttonState.text = "Stop"
                 startTimer( ( page2ui.spinHourValue * 60 * 60 + page2ui.spinMinuteValue * 60 + page2ui.spinSecondValue ) * 1000 )
             }
         }

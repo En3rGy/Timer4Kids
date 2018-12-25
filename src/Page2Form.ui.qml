@@ -8,7 +8,6 @@ Item {
     property alias spinHourValue: spinHour.value
     property alias alarmSwitchChecked: alarmSwitch.checked
     property alias autostartSwitchChecked: autostartSwitch.checked
-    property alias buttonStateText: buttonState.text
 
     property alias buttonQuit: buttonQuit
     property alias buttonState: buttonState
