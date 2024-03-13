@@ -1,6 +1,6 @@
 @echo off
 
-set MINGW_BIN=C:\Qt\5.9\msvc2013\bin
+set MINGW_BIN=C:\Qt\5.9\msvc2015\bin
 
 echo Copying files...
 

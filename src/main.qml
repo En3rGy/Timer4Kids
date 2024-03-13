@@ -15,12 +15,12 @@ ApplicationWindow {
 
     Connections {
         target: page2
-        onStartTimer: {
-            console.log( "Timer started" )
-            page1.bgColor = "black"
+        function onStartTimer(duration_ms) {
+            page1.setCircleVisible( false )
+            page1.setFinishCircle( false )
             setTimer( duration_ms )
         }
-        onPauseTimer: {
+        function onPauseTimer() {
             timer.stop()
             uiUpdateTimer.stop()
         }
@@ -38,7 +38,7 @@ ApplicationWindow {
 
     Timer {
         id: uiUpdateTimer
-        interval: 250
+        interval: 1000
         repeat: true
         triggeredOnStart: true
 
@@ -73,7 +73,7 @@ ApplicationWindow {
         }
 
         page1.setCircleVisible( true )
-        page1.setBgCircleColor( "midnightblue" )
+        page1.setFinishCircle( false )
 
         timer.interval = interval_ms
         timer.start()

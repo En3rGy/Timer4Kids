@@ -12,6 +12,9 @@ Item {
     property alias buttonQuit: buttonQuit
     property alias buttonState: buttonState
     property alias flickable: flickable
+    property alias labelCurrentTimeText: labelCurrentTime.text
+    //width: 320
+    //height: 240
 
     anchors.fill: parent
     anchors.margins: 9
@@ -26,25 +29,41 @@ Item {
             id: column
             width: parent.width - 10 // to show scroll bar
 
-            RowLayout {
+            Flow {
+                id: timeFlow
+                width: 100
+                height: 100
+                spacing: 6
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                Switch {
-                    id: alarmSwitch
-                    Layout.fillWidth: true
-                    text: "Is Alarm (instead of Timer)"
-                    checked: settings.bIsAlarm
-                }
 
-                Switch {
-                    id: autostartSwitch
-                    text: "Auto start"
-                    checked: settings.bAutostartEnabled
-                    Layout.fillWidth: true
+                Label {
+                    id: labelVersion
+                    text: "Programm Info"
+                }
+                Label {
+                    id: labelCurrentTime
+                    text: qsTr("23:59:59")
                 }
             }
 
+            Switch {
+                id: alarmSwitch
+                Layout.fillWidth: true
+                text: "Is Alarm (instead of Timer)"
+                checked: settings.bIsAlarm
+            }
+
+            Switch {
+                id: autostartSwitch
+                text: "Auto start"
+                checked: settings.bAutostartEnabled
+                Layout.fillWidth: true
+            }
+//            }
+
             RowLayout {
+                spacing: 6
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
@@ -103,8 +122,9 @@ Item {
             }
 
             RowLayout {
+                spacing: 6
+                Layout.fillHeight: true
                 Layout.fillWidth: true
-                spacing: parent.width / 3
 
                 Button {
                     id: buttonState
@@ -118,19 +138,6 @@ Item {
                     Layout.fillWidth: true
                 }
             }
-
-            Label {
-                text: Qt.application.displayName + " v" + Qt.application.version
-                      + " by " + Qt.application.organization
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignRight
-            }
         } // column
     } // flickable
 }
-
-
-/*##^## Designer {
-    D{i:0;autoSize:true;height:480;width:640}
-}
- ##^##*/

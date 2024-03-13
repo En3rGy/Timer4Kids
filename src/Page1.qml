@@ -1,12 +1,14 @@
-import QtQml 2.2
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.3
+import QtQml
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Shapes 1.6
 
 Item {
     id: page1Form
 
     property string bgCircleColor : "midnightblue"
+    property string finishedColor : "gold"
     property alias  bgColor : rectBack.color
 
     function setCircleVisible( bVisible ) {
@@ -15,25 +17,10 @@ Item {
         circleHoure.visible = bVisible
     }
 
-    function setBgCircleColor( sColor ) {
-
-        /// @bug bg color resetting from gold back to midnhight blue does not work;
-        // Removing the if sentence leads to not setting the color to gold after finish...?!?
-        // Try to hide the circles before setting the color and make the visible again afterwards
-
-        if ( bgCircleSec.colorCircle !== sColor ) {
-            bgCircleSec.colorCircle = sColor
-            bgCircleSec.arcBegin = 1
-            bgCircleSec.arcEnd = 360
-
-            bgCircleMin.colorCircle = sColor
-            bgCircleMin.arcBegin = 1
-            bgCircleMin.arcEnd = 360
-
-            bgCircleH.colorCircle = sColor
-            bgCircleH.arcBegin = 1
-            bgCircleH.arcEnd = 360
-        }
+    function setFinishCircle( bFinished ) {
+        circleHoureFinished.visible = bFinished
+        circleMinFinished.visible = bFinished
+        circleSecFinished.visible = bFinished
     }
 
 
@@ -41,7 +28,7 @@ Item {
 
         // timer finished
         if ( remainTime_ms <= 0.0 ) {
-            setBgCircleColor( "gold" )
+            setFinishCircle( true )
         }
 
         // reduce foreground circles w.r.t. progress
@@ -73,6 +60,7 @@ Item {
         }
     }
 
+    // Creates new ProgressCircles on top of the rectBack object and there fore draws many black "gap circles" on the three time circles
     function finishCreation() {
         var component = Qt.createComponent( "ProgressCircle.qml" );
 
@@ -152,6 +140,41 @@ Item {
             lineWidth: 10
         }
 
+        ProgressCircle {
+            id : circleSecFinished
+            anchors.centerIn: parent
+            size: Math.min( parent.width, parent.height ) * 0.5
+            colorCircle: finishedColor
+            arcBegin: 0
+            arcEnd: 360
+            lineWidth: 10
+            visible: false
+            z: 4
+        }
+
+        ProgressCircle {
+            id : circleMinFinished
+            anchors.centerIn: parent
+            size: Math.min( parent.width, parent.height ) * 0.7
+            colorCircle: finishedColor
+            arcBegin: 0
+            arcEnd: 360
+            lineWidth: 10
+            visible: false
+            z: 4
+        }
+
+        ProgressCircle {
+            id : circleHoureFinished
+            anchors.centerIn: parent
+            size: Math.min( parent.width, parent.height ) * 0.9
+            colorCircle: finishedColor
+            arcBegin: 0
+            arcEnd: 360
+            lineWidth: 10
+            visible: false
+            z: 4
+        }
 
         ProgressCircle {
             id : circleSec
@@ -172,6 +195,7 @@ Item {
             arcBegin: 0
             arcEnd: 360
             lineWidth: 10
+            z: 5
         }
 
         ProgressCircle {
@@ -182,8 +206,9 @@ Item {
             arcBegin: 0
             arcEnd: 360
             lineWidth: 10
+            z: 5
 
             Component.onCompleted: finishCreation();
         }
-    }
+    } // rectBack
 }

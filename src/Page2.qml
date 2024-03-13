@@ -1,9 +1,8 @@
-import QtQuick 2.4
-import QtQuick.Controls 1.4
-import QtQuick.Controls 2.0
-import QtQml.StateMachine 1.0 as DSM
-import QtQuick.Layouts 1.3
-import Qt.labs.settings 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQml.StateMachine as DSM
+import QtQuick.Layouts
+import QtCore
 
 Item {
     id: page2
@@ -37,9 +36,31 @@ Item {
         return alarmDate
     }
 
+    function saveSettings() {
+        settings.sec               = page2ui.spinSecondValue
+        settings.min               = page2ui.spinMinuteValue
+        settings.hour              = page2ui.spinHourValue
+        settings.bIsAlarm          = page2ui.alarmSwitchChecked
+        settings.bAutostartEnabled = page2ui.autostartSwitchChecked
+    }
+
     Connections {
         target: page2ui.buttonQuit
-        onClicked: Qt.quit();
+        function onClicked() {
+            Qt.quit();
+        }
+    }
+
+    Timer {
+        id: timerClock
+        interval: 1000
+        repeat: true
+        running: true
+        triggeredOnStart: true
+        onTriggered: {
+            var alarmDate = new Date( Date.now() )
+            page2ui.labelCurrentTimeText = alarmDate.toTimeString();
+        }
     }
 
     Page2Form {
@@ -70,7 +91,6 @@ Item {
                 signal: signal_autostart
             }
             onEntered: {
-                console.debug( "stoped state" )
                 page2ui.buttonState.text = "Start"
                 pauseTimer()
             }
@@ -86,9 +106,9 @@ Item {
                 signal: onTimerTriggered
             }
             onEntered: {
-                console.debug( "running state" )
                 page2ui.buttonState.text = "Stop"
                 startTimer( ( page2ui.spinHourValue * 60 * 60 + page2ui.spinMinuteValue * 60 + page2ui.spinSecondValue ) * 1000 )
+                saveSettings()
             }
         }
 
@@ -106,10 +126,6 @@ Item {
     }
 
     Component.onDestruction: {
-        settings.sec               = page2ui.spinSecondValue
-        settings.min               = page2ui.spinMinuteValue
-        settings.hour              = page2ui.spinHourValue
-        settings.bIsAlarm          = page2ui.alarmSwitchChecked
-        settings.bAutostartEnabled = page2ui.autostartSwitchChecked
+        saveSettings()
     }
 }
